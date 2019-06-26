@@ -3,8 +3,6 @@
  * Copyright (c) 2019 David Rice
  * 
  * Requires definitions for:
- * NRF24_CSN - CSN (active low) pin on nRF24L01+ (LEGACY)
- * NRF24_CE - Chip Enable pin on nRF24L01+ (LEGACY)
  * NRF24_CSN_ACTIVE() - Macro to set CSN pin low
  * NRF24_CSN_IDLE() - Macro to set CSN pin high
  * NRF24_CE_ACTIVE() - Macro to set CE pin high
@@ -36,6 +34,7 @@
 #include <stdint.h>
 
 #include "nRF24L01P.h"
+#include "nRF24L01P-cfg.h"
 
 /* Write the specified value to a single-byte register */
 void nrf24_write_register(uint8_t reg, uint8_t value)

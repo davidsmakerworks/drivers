@@ -1,5 +1,6 @@
 /*
- * Maxim DS18B20 1-Wire Temerature Sensor Driver
+ * Maxim DS18B20 1-Wire Temperature Sensor Driver
+ * Copyright (c) 2019 David Rice
  * 
  * This driver implements a minimal version of the 1-Wire protocol to communicate with the
  * DS18B20 temperature sensor. Timing specifications are checked based on a 1 ms timer.
@@ -8,6 +9,24 @@
  * 
  * TODO: Move ds18b20_init_timer and ds18b20_get_timer_value into a seperate
  * architecture-specific file to improve driver portability.
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ * 
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
  */
 
 #include <xc.h>
@@ -15,6 +34,7 @@
 #include <stdbool.h>
 
 #include "ds18b20.h"
+#include "ds18b20-cfg.h"
 
 /* Initializes Timer0 for use with 1-Wire bus timing */
 void ds18b20_init_timer(void) {
@@ -41,9 +61,9 @@ uint16_t ds18b20_get_timer_value(void) {
 
 /* Sends reset pulse on One Wire bus */
 void ds18b20_send_reset_pulse(void) {
-    DS18B20_TRIS = 0;
+    DS18B20_PULL_BUS_LOW();
     __delay_us(DS18B20_TX_RESET_TIME);
-    DS18B20_TRIS = 1;
+    DS18B20_RELEASE_BUS();
 }
 
 /* Listens for One Wire presence pulse and returns true if presence pulse is valid */
@@ -55,7 +75,7 @@ bool ds18b20_get_presence_pulse(void) {
     bool pulse_valid = false; /* Flag to indicate that the presence pulse was long enough to be valid */
     bool pulse_ended = false; /* Flag to indicate that the presence pulse ended within the allocated time window */
     
-    DS18B20_TRIS = 1; /* Release bus just to be safe */
+    DS18B20_RELEASE_BUS(); /* Release bus just to be safe */
     
     __delay_us(DS18B20_PRESENCE_START_TIME); /* Wait for the minimum amount of time before the pulse can start */
     
@@ -92,18 +112,18 @@ bool ds18b20_get_presence_pulse(void) {
 
 /* Transmit a zero bit on the One Wire bus */
 void ds18b20_write_bit_zero(void) {
-    DS18B20_TRIS = 0;
+    DS18B20_PULL_BUS_LOW();
     __delay_us(DS18B20_WRITE_0_TIME);
-    DS18B20_TRIS = 1;
+    DS18B20_RELEASE_BUS();
     
     __delay_us(DS18B20_RECOVER_TIME);
 }
 
 /* Transmit a one bit on the One Wire Bus */
 void ds18b20_write_bit_one(void) {
-    DS18B20_TRIS = 0;   
+    DS18B20_PULL_BUS_LOW();   
     __delay_us(DS18B20_WRITE_1_TIME);
-    DS18B20_TRIS = 1;
+    DS18B20_RELEASE_BUS();
     
     __delay_us(DS18B20_WRITE_SLOT_TIME - DS18B20_WRITE_1_TIME);
     __delay_us(DS18B20_RECOVER_TIME);
@@ -123,9 +143,9 @@ void ds18b20_write_byte(uint8_t data) {
 uint8_t ds18b20_read_bit(void) {
     uint8_t data;
     
-    DS18B20_TRIS = 0;
+    DS18B20_PULL_BUS_LOW();
     __delay_us(DS18B20_READ_TIME);
-    DS18B20_TRIS = 1;
+    DS18B20_RELEASE_BUS();
     
     __delay_us(DS18B20_SAMPLE_TIME);
     
