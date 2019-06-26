@@ -1,6 +1,6 @@
 /*
  * Driver for ST Microelectronics LSM6DS3x
- * Designed and implemented by David Rice
+ * Copyright (c) 2019 David Rice
  * 
  * Requires definitions for:
  * LSM6D_SPI_ACTIVE() - Code to set CSN pin low
@@ -10,7 +10,24 @@
  * LSM6D_SPI_TRANSFER(x) - Transfer one byte to/from SPI bus without changing CSN
  * 
  * Configuration is usually located in lsm6ds3x-cfg.h in the same folder with the main project
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
  * 
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
  */ 
 
 #include "lsm6ds3x.h"
