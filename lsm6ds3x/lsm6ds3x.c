@@ -30,6 +30,8 @@
  * SOFTWARE.
  */ 
 
+#include <stdint.h>
+
 #include "lsm6ds3x.h"
 #include "lsm6ds3x-cfg.h"
 
